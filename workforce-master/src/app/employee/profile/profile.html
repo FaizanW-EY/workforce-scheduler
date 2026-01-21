@@ -1,0 +1,29 @@
+<div class="card">
+<h2>My Profile</h2>
+<div class="button-group">
+<button class="view-btn" (click)="viewProfile()">View Profile</button>
+<button class="edit-btn" (click)="editProfile()">Edit Profile</button>
+</div>
+<hr><br>
+<!-- VIEW MODE -->
+<div *ngIf="mode === 'view'">
+<p><b>Full Name:</b> {{profile.fullName}}</p>
+<p><b>Department:</b> {{profile.department}}</p>
+<p><b>Designation:</b> {{profile.designation}}</p>
+<p><b>Max Weekly Hours:</b> {{profile.maxWeeklyHours}}</p>
+</div>
+<!-- EDIT MODE -->
+<div *ngIf="mode === 'edit'">
+<label>Full Name</label>
+<input [(ngModel)]="profile.fullName"><br><br>
+<label>Department</label>
+<input [(ngModel)]="profile.department"><br><br>
+<label>Designation</label>
+<input [(ngModel)]="profile.designation"><br><br>
+<label>Max Weekly Hours</label>
+<input type="number" [(ngModel)]="profile.maxWeeklyHours"><br><br>
+<button (click)="save()">Save Profile</button>
+</div>
+<p class="success">{{success}}</p>
+</div>
+ 

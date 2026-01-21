@@ -1,0 +1,51 @@
+<h2>Shift Templates</h2>
+
+<form (ngSubmit)="addTemplate()">
+
+  <!-- Input row -->
+  <div style="display:flex; gap:16px; align-items:flex-end; flex-wrap:wrap;">
+    <div style="display:flex; flex-direction:column;">
+      <label>Name</label>
+      <input [(ngModel)]="newTemplate.name" name="name" required />
+    </div>
+
+    <div style="display:flex; flex-direction:column;">
+      <label>Start Time</label>
+      <input type="time" [(ngModel)]="newTemplate.startTime" name="startTime" required />
+    </div>
+
+    <div style="display:flex; flex-direction:column;">
+      <label>End Time</label>
+      <input type="time" [(ngModel)]="newTemplate.endTime" name="endTime" required />
+    </div>
+
+    <div style="display:flex; flex-direction:column;">
+      <label>Break (minutes)</label>
+      <input type="number" min="0" [(ngModel)]="newTemplate.breakMinutes" name="breakMinutes" />
+    </div>
+
+    <div style="display:flex; flex-direction:column;">
+      <label>Headcount</label>
+      <input type="number" min="1" [(ngModel)]="newTemplate.requiredHeadcount" name="requiredHeadcount" />
+    </div>
+
+    <button type="submit" style="height:28px;">Add</button>
+  </div>
+
+  <!-- Validation error under inputs -->
+  <div *ngIf="validationError" style="color:red; margin-top:8px;">
+    {{ validationError }}
+  </div>
+
+  <!-- Rules under inputs -->
+  <div *ngIf="rule" style="margin-top:8px; font-size:14px;">
+    <strong>Rules:</strong>
+    MaxDailyHours = {{ rule.maxDailyHours }}h,
+    MaxWeeklyHours = {{ rule.maxWeeklyHours }}h,
+    MinRest = {{ rule.minRestPeriodHours }}h,
+    OvertimeThreshold = {{ rule.overtimeThresholdWeeklyHours }}h
+  </div>
+
+</form>
+
+<hr />

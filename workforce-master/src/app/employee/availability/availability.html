@@ -1,0 +1,41 @@
+<div class="card">
+<h2>My Availability</h2>
+<div class="button-group">
+<button class="view-btn" (click)="viewAvailability()">View Availability</button>
+<button class="edit-btn" (click)="editAvailability()">Edit Availability</button>
+</div>
+<!-- VIEW MODE -->
+<table *ngIf="mode === 'view'">
+<tr>
+<th>Day</th>
+<th>Available</th>
+<th>Start</th>
+<th>End</th>
+</tr>
+<tr *ngFor="let a of availability">
+<td>{{getDayName(a.day)}}</td>
+<td>{{a.isAvailable ? 'Yes' : 'No'}}</td>
+<td>{{a.startTime}}</td>
+<td>{{a.endTime}}</td>
+</tr>
+</table>
+<!-- EDIT MODE -->
+<table *ngIf="mode === 'edit'">
+<tr>
+<th>Day</th>
+<th>Available</th>
+<th>Start</th>
+<th>End</th>
+</tr>
+<tr *ngFor="let a of availability">
+<td>{{getDayName(a.day)}}</td>
+<td><input type="checkbox" [(ngModel)]="a.isAvailable"></td>
+<td><input type="time" [(ngModel)]="a.startTime" [disabled]="!a.isAvailable"></td>
+<td><input type="time" [(ngModel)]="a.endTime" [disabled]="!a.isAvailable"></td>
+</tr>
+</table>
+<br>
+<button *ngIf="mode === 'edit'" (click)="save()">Save Availability</button>
+<p class="success">{{success}}</p>
+</div>
+ 

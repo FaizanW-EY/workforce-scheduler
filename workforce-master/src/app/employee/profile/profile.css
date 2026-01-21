@@ -1,0 +1,30 @@
+.button-group {
+ display: flex;
+ justify-content: center;
+ gap: 15px;        /* space between buttons */
+ margin-bottom: 20px;
+}
+.view-btn {
+ padding: 10px 20px;
+ background-color: #4caf50;
+ color: white;
+ border: none;
+ border-radius: 6px;
+ cursor: pointer;
+ font-weight: bold;
+}
+.edit-btn {
+ padding: 10px 20px;
+ background-color: #1976d2;
+ color: white;
+ border: none;
+ border-radius: 6px;
+ cursor: pointer;
+ font-weight: bold;
+}
+.view-btn:hover {
+ background-color: #43a047;
+}
+.edit-btn:hover {
+ background-color: #1565c0;
+}

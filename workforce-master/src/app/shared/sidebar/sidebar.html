@@ -1,0 +1,41 @@
+<div style="width:200px; background:#eee; padding:10px; height:100vh">
+
+  <!-- ADMIN -->
+  <div *ngIf="role === 'Admin'">
+    <a routerLink="/admin">Admin Dashboard</a><br><br>
+    <a routerLink="/admin/create-user">Create User</a>
+  </div>
+
+  <!-- MANAGER -->
+  <div *ngIf="role === 'Manager'">
+  <a routerLink="/manager">Manager Dashboard</a><br><br>
+
+  <button type="button"
+          (click)="toggleShifts()"
+          style="display:block; width:100%; text-align:left; margin: 6px 0;">
+    Generate Shifts
+  </button>
+
+  <div *ngIf="shiftsOpen" style="padding-left:12px; display:flex; flex-direction:column; gap:6px; margin-bottom:10px;">
+    <a routerLink="/manager/shifts/templates">Shift Templates</a>
+    <a routerLink="/manager/shifts/instances">Shift Instances</a>
+    <a routerLink="/manager/shifts/patterns">Patterns</a>
+  </div>
+
+  <a routerLink="/manager/approvals">Approvals</a>
+  </div>
+
+
+  <!-- EMPLOYEE -->
+  <div *ngIf="role === 'Employee'">
+    <a routerLink="/employee">Employee Dashboard</a><br><br>
+    <a routerLink="/employee/profile" >Profile</a><br><br>
+    <a routerLink="/employee/availability">Availability</a>
+  </div>
+
+  <br><br>
+  <button (click)="logout()">Logout</button>
+
+</div>
+
+

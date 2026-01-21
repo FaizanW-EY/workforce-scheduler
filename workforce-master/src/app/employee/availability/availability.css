@@ -1,0 +1,76 @@
+.card {
+
+  background: white;
+
+  padding: 25px;
+
+  width: 650px;
+
+  border-radius: 8px;
+
+}
+
+table {
+
+  width: 100%;
+
+  border-collapse: collapse;
+
+}
+
+th, td {
+
+  padding: 10px;
+
+  border-bottom: 1px solid #ddd;
+
+  text-align: center;
+
+}
+
+.button-group {
+
+  display: flex;
+
+  justify-content: center;
+
+  gap: 15px;
+
+  margin-bottom: 15px;
+
+}
+
+.view-btn {
+
+  background: #4caf50;
+
+  color: white;
+
+  padding: 10px 20px;
+
+  border: none;
+
+  border-radius: 6px;
+
+}
+
+.edit-btn {
+
+  background: #1976d2;
+
+  color: white;
+
+  padding: 10px 20px;
+
+  border: none;
+
+  border-radius: 6px;
+
+}
+
+.success {
+
+  color: green;
+
+}
+ 

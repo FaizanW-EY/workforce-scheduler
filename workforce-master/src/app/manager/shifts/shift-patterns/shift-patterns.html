@@ -1,0 +1,172 @@
+<h2>Generate Shift Instances (Patterns)</h2>
+
+<div style="display:flex; gap:12px; flex-wrap:wrap; margin-bottom:12px;">
+  <div style="display:flex; flex-direction:column;">
+    <label>Pattern Type</label>
+    <select [(ngModel)]="patternType" name="patternType">
+      <option value="fixedWeekly">Fixed Weekly</option>
+      <option value="rotational">Rotational</option>
+      <option value="cyclic">Cyclic (e.g. 5-on-2-off)</option>
+    </select>
+  </div>
+
+  <div style="display:flex; flex-direction:column;">
+    <label>From</label>
+    <input type="date" [(ngModel)]="fromDate" name="fromDate" />
+  </div>
+
+  <div style="display:flex; flex-direction:column;">
+    <label>To</label>
+    <input type="date" [(ngModel)]="toDate" name="toDate" />
+  </div>
+</div>
+
+<!-- FIXED WEEKLY -->
+<div *ngIf="patternType === 'fixedWeekly'" style="border:1px solid #ddd; padding:12px; margin-bottom:12px;">
+  <h3>Fixed Weekly</h3>
+  <p>Select a template for each weekday (leave as “None” to skip).</p>
+
+  <table border="1" cellpadding="6" cellspacing="0">
+    <tr>
+      <th>Day</th>
+      <th>Template</th>
+      <th>Override (optional)</th>
+    </tr>
+
+    <tr *ngFor="let d of [0,1,2,3,4,5,6]">
+      <td>
+        {{ ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][d] }}
+      </td>
+      <td>
+        <select [(ngModel)]="weeklyMap[d]" name="weeklyMap{{d}}">
+          <option [ngValue]="0">None</option>
+          <option *ngFor="let t of templates" [ngValue]="t.id">
+            {{ t.name }} ({{ t.startTime }} - {{ t.endTime }})
+          </option>
+        </select>
+      </td>
+      <td>
+        <input type="number" min="1"
+               [(ngModel)]="weeklyOverride[d]"
+               name="weeklyOverride{{d}}"
+               placeholder="blank = default" />
+      </td>
+    </tr>
+  </table>
+</div>
+
+<!-- ROTATIONAL -->
+<div *ngIf="patternType === 'rotational'" style="border:1px solid #ddd; padding:12px; margin-bottom:12px;">
+  <h3>Rotational</h3>
+
+  <div style="display:flex; gap:12px; flex-wrap:wrap; margin-bottom:12px;">
+    <div style="display:flex; flex-direction:column;">
+      <label>Rotation Anchor Date</label>
+      <input type="date" [(ngModel)]="rotationAnchorDate" name="rotationAnchorDate" />
+    </div>
+
+    <div style="display:flex; flex-direction:column; min-width:260px;">
+      <label>Add template to rotation (in order)</label>
+      <select [(ngModel)]="rotationAddTemplateId" name="rotationAddTemplateId">
+        <option [ngValue]="0">-- Select Template --</option>
+        <option *ngFor="let t of templates" [ngValue]="t.id">
+          {{ t.name }} ({{ t.startTime }} - {{ t.endTime }})
+        </option>
+      </select>
+    </div>
+
+    <div style="display:flex; flex-direction:column;">
+      <label>Override (optional)</label>
+      <input type="number" min="1" [(ngModel)]="rotationAddOverride" name="rotationAddOverride" />
+    </div>
+
+    <button type="button" (click)="addRotationItem()" style="height:28px; align-self:end;">
+      Add to Rotation
+    </button>
+  </div>
+
+  <div *ngIf="rotation.length === 0">
+    <em>No rotation items yet.</em>
+  </div>
+
+  <table *ngIf="rotation.length > 0" border="1" cellpadding="6" cellspacing="0">
+    <tr>
+      <th>#</th>
+      <th>Template</th>
+      <th>Override</th>
+      <th>Action</th>
+    </tr>
+    <tr *ngFor="let r of rotation; let i = index">
+      <td>{{ i + 1 }}</td>
+      <td>{{ r.templateId }} - {{ templateName(r.templateId) }}</td>
+      <td>{{ r.override ?? '-' }}</td>
+      <td><button type="button" (click)="removeRotationItem(i)">Remove</button></td>
+    </tr>
+  </table>
+</div>
+
+<!-- CYCLIC -->
+<div *ngIf="patternType === 'cyclic'" style="border:1px solid #ddd; padding:12px; margin-bottom:12px;">
+  <h3>Cyclic (On/Off)</h3>
+
+  <div style="display:flex; gap:12px; flex-wrap:wrap;">
+    <div style="display:flex; flex-direction:column;">
+      <label>Cycle Anchor Date</label>
+      <input type="date" [(ngModel)]="cycleAnchorDate" name="cycleAnchorDate" />
+    </div>
+
+    <div style="display:flex; flex-direction:column;">
+      <label>On Days</label>
+      <input type="number" min="1" [(ngModel)]="onDays" name="onDays" />
+    </div>
+
+    <div style="display:flex; flex-direction:column;">
+      <label>Off Days</label>
+      <input type="number" min="0" [(ngModel)]="offDays" name="offDays" />
+    </div>
+
+    <div style="display:flex; flex-direction:column; min-width:260px;">
+      <label>Template for On Days</label>
+      <select [(ngModel)]="cycleTemplateId" name="cycleTemplateId">
+        <option [ngValue]="0">-- Select Template --</option>
+        <option *ngFor="let t of templates" [ngValue]="t.id">
+          {{ t.name }} ({{ t.startTime }} - {{ t.endTime }})
+        </option>
+      </select>
+    </div>
+
+    <div style="display:flex; flex-direction:column;">
+      <label>Override (optional)</label>
+      <input type="number" min="1" [(ngModel)]="cycleOverride" name="cycleOverride" />
+    </div>
+  </div>
+</div>
+
+<div style="display:flex; gap:12px; margin:12px 0;">
+  <button type="button" (click)="previewGenerate()">Preview</button>
+  <button type="button" (click)="generateNow()" [disabled]="generating || preview.length === 0">
+    {{ generating ? 'Generating...' : 'Generate' }}
+  </button>
+</div>
+
+<div *ngIf="message" style="margin-bottom:12px;">
+  <strong>{{ message }}</strong>
+</div>
+
+<h3>Preview</h3>
+<table border="1" cellpadding="6" cellspacing="0" *ngIf="preview.length > 0">
+  <tr>
+    <th>Date</th>
+    <th>Template</th>
+    <th>Override</th>
+  </tr>
+  <tr *ngFor="let p of preview">
+    <td>{{ p.shiftDate }}</td>
+    <td>{{ p.templateName ?? p.shiftTemplateId }}</td>
+    <td>{{ p.requiredHeadcountOverride ?? '-' }}</td>
+  </tr>
+</table>
+
+<div *ngIf="preview.length === 0">
+  <em>No preview items yet.</em>
+</div>

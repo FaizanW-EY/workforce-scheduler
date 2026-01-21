@@ -1,0 +1,13 @@
+<div class="card">
+<h2>Create User</h2>
+<input type="text" placeholder="Email" [(ngModel)]="email"><br><br>
+<input type="password" placeholder="Password" [(ngModel)]="password"><br><br>
+<select [(ngModel)]="roleId">
+<option value="1">Admin</option>
+<option value="2">Manager</option>
+<option value="3">Employee</option>
+</select><br><br>
+<button (click)="create()">Create User</button>
+<p class="success">{{success}}</p>
+<p class="error">{{error}}</p>
+</div>

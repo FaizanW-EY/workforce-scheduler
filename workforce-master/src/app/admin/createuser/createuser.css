@@ -1,0 +1,26 @@
+.card {
+ background: white;
+ padding: 25px;
+ border-radius: 8px;
+ width: 350px;
+ box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+input, select {
+ width: 100%;
+ padding: 8px;
+}
+button {
+ width: 100%;
+ padding: 10px;
+ background: #1976d2;
+ color: white;
+ border: none;
+ border-radius: 5px;
+ cursor: pointer;
+}
+.success {
+ color: green;
+}
+.error {
+ color: red;
+}

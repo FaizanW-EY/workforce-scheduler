@@ -1,0 +1,74 @@
+<h2>Shift Instances</h2>
+
+<form (ngSubmit)="addShiftInstance()" style="display:flex; gap:16px; align-items:flex-end; flex-wrap:wrap;">
+
+  <!-- Date -->
+  <div style="display:flex; flex-direction:column;">
+    <label>Date</label>
+    <input
+      type="date"
+      [(ngModel)]="newInstance.shiftDate"
+      name="shiftDate"
+      required
+    />
+  </div>
+
+  <!-- Template Dropdown -->
+  <div style="display:flex; flex-direction:column; min-width:240px;">
+    <label>Shift Template</label>
+    <select
+      [(ngModel)]="newInstance.shiftTemplateId"
+      name="shiftTemplateId"
+      required
+    >
+      <option [ngValue]="0">-- Select Template --</option>
+      <option *ngFor="let t of shiftTemplates" [ngValue]="t.id">
+        {{ t.name }} ({{ t.startTime }} - {{ t.endTime }})
+      </option>
+    </select>
+  </div>
+
+  <!-- Optional Headcount Override -->
+  <div style="display:flex; flex-direction:column;">
+    <label>Headcount Override (optional)</label>
+    <input
+      type="number"
+      min="1"
+      [(ngModel)]="newInstance.requiredHeadcountOverride"
+      name="requiredHeadcountOverride"
+      placeholder="Leave blank"
+    />
+  </div>
+
+  <button type="submit" style="height:28px;">Create</button>
+</form>
+
+<hr />
+
+<table border="1" cellpadding="6" cellspacing="0">
+  <tr>
+    <th>ID</th>
+    <th>Date</th>
+    <th>Template</th>
+    <th>Start</th>
+    <th>End</th>
+    <th>Override</th>
+    <th>Action</th>
+  </tr>
+
+  <tr *ngFor="let s of shiftInstances">
+    <td>{{ s.id }}</td>
+    <td>{{ s.shiftDate | date:'yyyy-MM-dd' }}</td>
+
+    <!-- If API includes navigation (shiftTemplate), use it; else fallback -->
+    <td>{{ s.shiftTemplate?.name ?? getTemplateName(s.shiftTemplateId) }}</td>
+    <td>{{ s.shiftTemplate?.startTime ?? '-' }}</td>
+    <td>{{ s.shiftTemplate?.endTime ?? '-' }}</td>
+
+    <td>{{ s.requiredHeadcountOverride ?? '-' }}</td>
+
+    <td>
+      <button (click)="deleteShiftInstance(s.id)">Delete</button>
+    </td>
+  </tr>
+</table>
