@@ -10,6 +10,17 @@ namespace api.Controllers
     public class ShiftTemplatesController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+        private static double GetNetHours(TimeSpan start, TimeSpan end, int breakMinutes)
+        {
+            // Handle overnight shifts (end next day)
+            var duration = end - start;
+            if (duration < TimeSpan.Zero)
+                duration += TimeSpan.FromHours(24);
+
+            var net = duration - TimeSpan.FromMinutes(breakMinutes);
+            return net.TotalHours;
+        }
+
 
         public ShiftTemplatesController(ApplicationDbContext context)
         {
@@ -55,8 +66,6 @@ namespace api.Controllers
             };
 
             // Validation
-            if (template.EndTime <= template.StartTime)
-                return BadRequest(new { message = "End time must be after start time" });
 
             if (template.BreakMinutes < 0)
                 return BadRequest(new { message = "Break minutes cannot be negative" });
@@ -75,6 +84,7 @@ namespace api.Controllers
         public async Task<IActionResult> UpdateShiftTemplate(int id, [FromBody] ShiftTemplateDto dto)
         {
             var template = await _context.ShiftTemplates.FindAsync(id);
+
             if (template == null)
                 return NotFound(new { message = "Shift template not found" });
 
@@ -91,8 +101,6 @@ namespace api.Controllers
             template.RequiredHeadcount = dto.RequiredHeadcount;
 
             // Validation
-            if (template.EndTime <= template.StartTime)
-                return BadRequest(new { message = "End time must be after start time" });
 
             if (template.BreakMinutes < 0)
                 return BadRequest(new { message = "Break minutes cannot be negative" });

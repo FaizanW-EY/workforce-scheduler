@@ -29,6 +29,14 @@ export interface ShiftInstance {
   shiftTemplate?: ShiftTemplate; // present if API includes navigation
 }
 
+export interface SchedulingRule {
+  id: number;
+  maxDailyHours: number;
+  maxWeeklyHours: number;
+  minRestPeriodHours: number;
+  overtimeThresholdWeeklyHours: number;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -73,6 +81,10 @@ export class ShiftService {
   deleteShiftInstance(id: number): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/shiftinstances/${id}`);
   }
+  // ---------- SCHEDULING RULES ----------
+  getSchedulingRule(): Observable<SchedulingRule> {
+  return this.http.get<SchedulingRule>(`${this.baseUrl}/schedulingrules/active`);
+}
 }
 
 
