@@ -1,0 +1,48 @@
+<h2>Review Assignments</h2>
+
+<div *ngIf="!showApproved">
+  <table border="1">
+    <tr>
+      <th>Employee</th>
+      <th>Shift Date</th>
+      <th>Shift Time</th>
+      <th>Action</th>
+    </tr>
+
+    <tr *ngFor="let a of items">
+      <td>{{ a.employeeId }}</td>
+      <td>{{ a.shiftInstance.shiftDate | date }}</td>
+      <td>
+        {{ a.shiftInstance.shiftTemplate.startTime }} -
+        {{ a.shiftInstance.shiftTemplate.endTime }}
+      </td>
+      <td>
+        <button (click)="approve(a.assignmentId)">Approve</button>
+        <button (click)="reject(a.assignmentId)">Reject</button>
+        <button (click)="override(a.assignmentId, a.employeeId)">Override</button>
+      </td>
+    </tr>
+  </table>
+
+  <textarea [(ngModel)]="reason" placeholder="Justification"></textarea>
+  <br />
+  <button (click)="publish()">Publish Approved Shifts</button>
+</div>
+
+<div *ngIf="showApproved">
+  <h3>Approved Shifts</h3>
+
+  <table border="1">
+    <tr>
+      <th>Employee</th>
+      <th>Shift Date</th>
+      <th>Shift Time</th>
+    </tr>
+
+    <tr *ngFor="let a of approvedItems">
+      <td>{{ a.employeeId }}</td>
+      <td>{{ a.shiftDate | date }}</td>
+      <td>{{ a.shiftName }}</td>
+    </tr>
+  </table>
+</div>
