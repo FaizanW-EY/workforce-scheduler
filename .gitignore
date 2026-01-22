@@ -1,0 +1,18 @@
+# Visual Studio
+.vs/
+*.user
+*.suo
+
+# .NET build output
+**/bin/
+**/obj/
+api/obj/
+api/bin/
+
+# Node / Angular
+node_modules/
+dist/
+
+# OS
+.DS_Store
+Thumbs.db
