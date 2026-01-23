@@ -1,0 +1,51 @@
+<h2>Employee Attendance</h2>
+<input type="number" [(ngModel)]="employeeId" placeholder="Employee ID">
+<button (click)="loadAssignments()">Load My Shifts</button>
+<p style="color:green">{{ message }}</p>
+<table border="1" *ngIf="list.length">
+<tr>
+<th>Shift</th>
+<th>Date</th>
+<th>Time</th>
+<th>Check-in</th>
+<th>Check-out</th>
+<th>Absent</th>
+</tr>
+<tr *ngFor="let a of list">
+<td>{{ a.shiftName }}</td>
+<td>{{ a.shiftDate | date }}</td>
+<td>{{ a.startTime }} - {{ a.endTime }}</td>
+<!-- CHECK IN -->
+<td>
+<input type="time" #cin [disabled]="a.checkedIn || a.absent">
+<button (click)="checkIn(a, cin.value)"
+
+              [disabled]="a.checkedIn || a.absent">
+
+        Check In
+</button>
+</td>
+<!-- CHECK OUT -->
+<td>
+<input type="time" #cout [disabled]="!a.checkedIn || a.checkedOut">
+<button (click)="checkOut(a, cout.value)"
+
+              [disabled]="!a.checkedIn || a.checkedOut">
+
+        Check Out
+</button>
+</td>
+<!-- ABSENT -->
+<td>
+<button (click)="markAbsent(a)"
+
+              [disabled]="a.checkedIn || a.absent">
+
+        Mark Absent
+</button>
+</td>
+</tr>
+</table>
+<br>
+<!-- <button (click)="generateUtilization()">Generate Utilization</button> -->
+ 

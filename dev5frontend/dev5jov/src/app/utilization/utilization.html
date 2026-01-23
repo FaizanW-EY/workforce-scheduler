@@ -1,0 +1,30 @@
+<h2>Generate Utilization</h2>
+<div style="max-width: 500px">
+<label>From Date</label><br />
+<input type="date" [(ngModel)]="fromDate" /><br /><br />
+<label>To Date</label><br />
+<input type="date" [(ngModel)]="toDate" /><br /><br />
+<button (click)="generate()">Generate Utilization</button>
+<p style="color: green">{{ message }}</p>
+</div>
+<hr />
+<!-- UTILIZATION TABLE -->
+<table *ngIf="list.length" border="1" cellpadding="8">
+<tr>
+<th>Employee ID</th>
+<th>Scheduled Hours</th>
+<th>Worked Hours</th>
+<th>Utilization %</th>
+<th>Overtime</th>
+<th>Underutilization</th>
+</tr>
+<tr *ngFor="let u of list">
+<td>{{ u.employeeId }}</td>
+<td>{{ u.scheduledHours }}</td>
+<td>{{ u.workedHours }}</td>
+<td>{{ u.utilizationPercent }}%</td>
+<td>{{ u.overtimeHours }}</td>
+<td>{{ u.underutilizationHours }}</td>
+</tr>
+</table>
+ 
